@@ -11,13 +11,14 @@ end
 
 post '/submit' do
 	paper = Paper.new
-	
+	paper.title
 end
 
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/websubrev.db")
 class Paper
 	include DataMapper::Resource
 	property :id, Serial
+	property :name, String, :required => true
 	property :abstract, Text, :required => true
 	property :comments, Text
 	
