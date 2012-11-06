@@ -30,15 +30,22 @@ class Author
 	include DataMapper::Resource
 	property :id, Serial
 	property :name, String, :required => true
-	property :email, String, :format => :email_address, :required => true
-
-	has n :papers, :through => Resource
+	
+	has n, :emails, :required => true
+	has n, :papers, :through => Resource
 end
 
 class Affiliation
 	include DataMapper::Resource
 	property :id, Serial
 	property :name, String, :required => true
+end
+
+class Email
+	include DataMapper::Resource
+	property :id, Serial
+	property :email, String, :format => :email_address, :required => true
+	belongs_to :author
 end
 
 class Keyword
