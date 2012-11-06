@@ -1,6 +1,5 @@
 <h1>New submission</h1>
-<form name="submit" onsubmit="return checkform(this);" action="receipt1.html" enctype="multipart/form-data" method="post">
-<input name="MAX_FILE_SIZE" value="20000000" type="hidden">
+<form name="submit" action="/submit" method="post">
 
 <table cellpadding="6">
 <tbody>
@@ -26,7 +25,7 @@
   </td></tr>
   <tr>
     <td style="text-align: right;"><small>(*)</small> Contact Email(s):</td>
-    <td><input name="contact" size="70" onchange="return checkEmailList(this)" type="string"><br>
+    <td><input name="emails" size="70" type="string"><br>
         Comma-separated list with <b>at least one valid email address</b> of the form user@domain; for example:<br/>
 	<tt>first-author@university.edu, secondAuthor@company.com, third.one@somewhere.org</tt><br/>
     </td>
@@ -35,15 +34,6 @@
     <td style="text-align: right;"><small>(*)</small> Abstract:</td>
     <td><textarea name="abstract" rows="15" cols="80"></textarea><br>
         Use only plain ASCII and LaTeX conventions for math, but no HTML tags.
-        <br>
-    </td>
-  </tr>
-  <tr>
-    <td style="text-align: right;">
-	<small>(*)</small>&nbsp;Submission&nbsp;File: </td>
-    <td><input name="sub_file" size="70" type="file"><br>
-        The submission itself, in one of the supported formats
-	(pdf, ps, <a href="../submit/index1.html#formats">click for details</a>).
         <br>
     </td>
   </tr>
@@ -66,7 +56,7 @@
   </tr>
   <tr>
     <td style="text-align: right;">Comments to Chair: </td>
-    <td><textarea name="comment" rows="4" cols="80"></textarea><br>
+    <td><textarea name="comments" rows="4" cols="80"></textarea><br>
         This message will only be seen by the program chair(s).
     </td>
   </tr>

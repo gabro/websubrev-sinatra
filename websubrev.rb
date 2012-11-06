@@ -11,46 +11,63 @@ get '/submit' do
 end
 
 post '/submit' do
-	paper = Paper.new
-	paper.title = params['title']
-	paper.abstract = params['abstract']
-	paper.comments = params['comments']
+	begin
+		paper = Paper.new
+		paper.title = params['title']
+		paper.abstract = params['abstract']
+		paper.comments = params['comments']
+		category = params['category']
+		paper.category = Category.first_or_create(:name => category) unless category.nil?
 
-	authors = params['authors'].split(',')
-	emails = params['emails'].split(',')
-	authors_emails = authors.zip(emails)
-	authors_emails.each do |ae|
-		author = Author.first_or_create(:name => ae[0])
-		email = ae[1]
-		author.emails << email
-		paper.authors << author
+		authors = params['authors'].split(',').collect {|x| x.strip}
+		emails = params['emails'].split(',').collect {|x| x.strip}
+		affiliations = params['affiliations'].split(',').collect {|x| x.strip}
+
+		authors_emails_aff = authors.zip(emails, affiliations)
+		authors_emails_aff.each do |tuple|
+			author = Author.first_or_create(:name => tuple[0])
+			email = Email.first_or_create(:email => tuple[1]) unless tuple[1].nil?
+			affiliation = Affiliation.first_or_create(:name => tuple[2]) unless tuple[2].nil?
+			author.emails << email unless email.nil?
+			author.affiliations << affiliation unless affiliations.nil?
+			paper.authors << author
+		end
+
+		keywords = params['keywords'].split(',').collect {|x| x.strip}
+		keywords.each do |kw|
+			keyword = Keyword.first_or_create(:name => kw)
+			paper.keywords << keyword
+		end
+
+		@message = 'Submission complete'
+		erb :success if paper.save
+	# rescue Exception => e
+	# 	@error_message = e
+	# 	erb :error
 	end
-
-	keywords = params['keywords'].split(',')
-	keywords.each do |kw|
-		keyword = Keyword.first_or_create(:name => kw)
-		paper.keywords << keyword
-	end
-
-	redirect '/submit/success' if paper.save
 
 end
 
-get '/submit/success' do
-	@message = Submission complete
-	erb :success
-end
+# get '/submit/success' do
+# 	@message = Submission complete
+# 	erb :success
+# end
 
+# get '/sumibt/error'  do
+# 	#
+# end
+ 
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/websubrev.db")
 class Paper
 	include DataMapper::Resource
 	property :id, Serial
-	property :name, String, :required => true
+	property :title, String, :required => true
 	property :abstract, Text, :required => true
 	property :comments, Text
-	
-	has n, :authors, :through => Resource, :required => true
+
+	has n, :authors, :through => Resource
 	has n, :keywords
+	belongs_to :category, :required => false
 end
 
 class Author
@@ -58,7 +75,8 @@ class Author
 	property :id, Serial
 	property :name, String, :required => true
 	
-	has n, :emails, :required => true
+	has n, :affiliations
+	has n, :emails
 	has n, :papers, :through => Resource
 end
 
@@ -85,7 +103,9 @@ class Category
 	include DataMapper::Resource
 	property :id, Serial
 	property :name, String, :required => true
+
+	has n, :papers
 end
 
-# DataMapper.finalize.auto_migrate!
-DataMapper.finalize.auto_upgrade!
+DataMapper.finalize.auto_migrate!
+# DataMapper.finalize.auto_upgrade!
