@@ -1,0 +1,80 @@
+<h1>New submission</h1>
+<form name="submit" onsubmit="return checkform(this);" action="receipt1.html" enctype="multipart/form-data" method="post">
+<input name="MAX_FILE_SIZE" value="20000000" type="hidden">
+
+<table cellpadding="6">
+<tbody>
+  <tr><td></td>
+    <td style="color: green; text-align: right;">
+     Mandatory fields are marked with a (*)</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><small>(*)</small>&nbsp;Submission&nbsp;Title:</td>
+    <td><input name="title" size="90" type="string"><br>
+        The title of the paper that you are submitting</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><small>(*)</small> Authors:</td>
+    <td><input name="authors" size="90" type="string"><br>
+        Separate multiple authors with '<i>and</i>' (e.g., Alice First 
+	<i>and</i> Bob T. Second <i>and</i> C. P. Third). <br>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">Affiliations:</td>
+        <td><input name="affiliations" size="70" type="string">
+  </td></tr>
+  <tr>
+    <td style="text-align: right;"><small>(*)</small> Contact Email(s):</td>
+    <td><input name="contact" size="70" onchange="return checkEmailList(this)" type="string"><br>
+        Comma-separated list with <b>at least one valid email address</b> of the form user@domain; for example:<br/>
+	<tt>first-author@university.edu, secondAuthor@company.com, third.one@somewhere.org</tt><br/>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><small>(*)</small> Abstract:</td>
+    <td><textarea name="abstract" rows="15" cols="80"></textarea><br>
+        Use only plain ASCII and LaTeX conventions for math, but no HTML tags.
+        <br>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">
+	<small>(*)</small>&nbsp;Submission&nbsp;File: </td>
+    <td><input name="sub_file" size="70" type="file"><br>
+        The submission itself, in one of the supported formats
+	(pdf, ps, <a href="../submit/index1.html#formats">click for details</a>).
+        <br>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">Category:</td>
+    <td><select name="category">
+        <option selected="selected" value="None">(no category)</option>
+        <option value="foundations">foundations</option>
+        <option value="secret-key cryptography">secret-key cryptography</option>
+        <option value="public-key cryptography">public-key cryptography</option>
+        <option value="cryptographic protocols">cryptographic protocols</option>
+        <option value="implementation">implementation</option>
+        <option value="applications">applications</option>
+      </select>
+    </td>
+  </tr>
+<tr>
+    <td style="text-align: right;">Keywords:</td>
+    <td><input name="keywords" size="90" type="string"><br></td>
+  </tr>
+  <tr>
+    <td style="text-align: right;">Comments to Chair: </td>
+    <td><textarea name="comment" rows="4" cols="80"></textarea><br>
+        This message will only be seen by the program chair(s).
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><input value="Submit" type="submit">
+    </td>
+  </tr>
+</tbody>
+</table>
+</form>
