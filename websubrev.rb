@@ -6,12 +6,39 @@ get '/' do
 end
 
 get '/submit' do
-
+	@title = 'New submission'
+	erb :submission
 end
 
 post '/submit' do
 	paper = Paper.new
-	paper.title
+	paper.title = params['title']
+	paper.abstract = params['abstract']
+	paper.comments = params['comments']
+
+	authors = params['authors'].split(',')
+	emails = params['emails'].split(',')
+	authors_emails = authors.zip(emails)
+	authors_emails.each do |ae|
+		author = Author.first_or_create(:name => ae[0])
+		email = ae[1]
+		author.emails << email
+		paper.authors << author
+	end
+
+	keywords = params['keywords'].split(',')
+	keywords.each do |kw|
+		keyword = Keyword.first_or_create(:name => kw)
+		paper.keywords << keyword
+	end
+
+	redirect '/submit/success' if paper.save
+
+end
+
+get '/submit/success' do
+	@message = Submission complete
+	erb :success
 end
 
 DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/websubrev.db")
